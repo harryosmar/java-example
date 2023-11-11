@@ -3,9 +3,6 @@ import java.util.Locale;
 import java.util.Scanner;
 
 class Produk {
-
-    private int id;
-
     private String nama;
     private double harga;
     private String kategori;
@@ -13,8 +10,7 @@ class Produk {
 
     private boolean isInFreeOffer;
 
-    public Produk(int id, String nama, double harga, String kategori, NumberFormat numberFormat, boolean isInFreeOffer) {
-        this.id = id;
+    public Produk(String nama, double harga, String kategori, NumberFormat numberFormat, boolean isInFreeOffer) {
         this.nama = nama;
         this.harga = harga;
         this.kategori = kategori;
@@ -36,10 +32,6 @@ class Produk {
 
     public void tampilProduk() {
         System.out.println(this.kategori + " " + nama + " Rp " + numberFormat.format(harga));
-    }
-
-    public int getId() {
-        return id;
     }
 
     public boolean isInFreeOffer() {
@@ -158,15 +150,6 @@ class AplikasiRestoran {
 
     static Scanner scanner;
 
-    private static void tampilPilihanPesanan(String categori) {
-        for (int i = 0; i < listProduk.length; i++) {
-            if (listProduk[i].getCategory() == categori) {
-                System.out.print(i+1 + ". ");
-                listProduk[i].tampilProduk();
-            }
-        }
-    }
-
     private static Produk[] getFreeOffer() {
         Produk[] freeOffer = new Produk[0];
         for (int i = 0; i < listProduk.length; i++) {
@@ -181,6 +164,31 @@ class AplikasiRestoran {
         return freeOffer;
     }
 
+    private static Produk[] getByKategori(String kategori) {
+        Produk[] ordered = new Produk[0];
+        for (int i = 0; i < listProduk.length; i++) {
+            if (listProduk[i].getCategory() == kategori) {
+                Produk[] newOrdered = new Produk[ordered.length + 1];
+                System.arraycopy(ordered, 0, newOrdered, 0, ordered.length);
+                newOrdered[ordered.length] = listProduk[i];
+                ordered = newOrdered;
+            }
+        }
+
+        return ordered;
+    }
+
+    private static void grupListProdukPerKategori() {
+        Produk[] makanan = getByKategori("makanan");
+        Produk[] minuman = getByKategori("minuman");
+
+        // Create a new array to store the merged elements
+        Produk[] newlistProduk = new Produk[makanan.length + minuman.length];
+        System.arraycopy(makanan, 0, newlistProduk, 0, makanan.length);
+        System.arraycopy(minuman, 0, newlistProduk, makanan.length, minuman.length);
+        listProduk = newlistProduk;
+    }
+
     private static void fiturPemesanan() {
         Keranjang keranjang = new Keranjang(numberFormat);
 
@@ -188,8 +196,13 @@ class AplikasiRestoran {
             System.out.println("=========================");
             System.out.println("Masukkan pesanan Anda");
             System.out.println("=========================");
-            tampilPilihanPesanan("makanan");
-            tampilPilihanPesanan("minuman");
+
+            grupListProdukPerKategori();
+            for (int i = 0; i < listProduk.length; i++) {
+                    System.out.print(i+1 + ". ");
+                    listProduk[i].tampilProduk();
+            }
+
             System.out.println("Ketik 0 untuk berhenti pesan");
             System.out.print("Masukkan pilihan 1-"+ listProduk.length +" : ");
             int pilihan = scanner.nextInt();
@@ -213,13 +226,15 @@ class AplikasiRestoran {
                     if (pilihanGratis > freeOffer.length) {
                         return;
                     }
-                    keranjang.addToCart(freeOffer[pilihanGratis - 1], 1, 0);
+                    Produk produkGratis = freeOffer[pilihanGratis - 1];
+                    keranjang.addToCart(produkGratis, 1, 0);
                 }
                 break;
             }
             System.out.print("Masukkan jumlah untuk pesanan: ");
             int jumlahProduk = scanner.nextInt();
-            keranjang.addToCart(listProduk[pilihan], jumlahProduk, listProduk[pilihan - 1].getHarga());
+            Produk produkPilihan = listProduk[pilihan - 1];
+            keranjang.addToCart(produkPilihan, jumlahProduk, produkPilihan.getHarga());
         }
 
 
@@ -242,10 +257,10 @@ class AplikasiRestoran {
         numberFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID")); // Set the locale to Indonesia
 
         listProduk = new Produk[]{
-                new Produk(1, "nasi goreng", 35000, "makanan", numberFormat, false),
-                new Produk(2, "bakmie goreng", 45000, "makanan", numberFormat, false),
-                new Produk(3, "air mineral", 3000, "minuman", numberFormat, true),
-                new Produk(4, "teh manis", 5000, "minuman", numberFormat, true),
+                new Produk( "air mineral", 3000, "minuman", numberFormat, true),
+                new Produk( "nasi goreng", 35000, "makanan", numberFormat, false),
+                new Produk( "teh manis", 5000, "minuman", numberFormat, true),
+                new Produk( "bakmie goreng", 45000, "makanan", numberFormat, false),
         };
 
 
