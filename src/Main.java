@@ -360,8 +360,12 @@ class AplikasiRestoran {
             } else if (pilihan == 2) {
                 System.out.print("Masukkan id produk : ");
                 int idProduk = scanner.nextInt();
-
-                katalog.hapusProduk(idProduk);
+                Scanner newscanner = new Scanner(System.in);
+                System.out.print("Apakah Anda yakin menghapus produk id \""+ idProduk +"\" y/n ? ");
+                String konfirmasi = newscanner.nextLine().trim();
+                if (konfirmasi.equals("y")) {
+                    katalog.hapusProduk(idProduk);
+                }
             } else if (pilihan == 3) {
                 System.out.print("Masukkan id produk : ");
                 int idProduk = scanner.nextInt();
@@ -384,6 +388,10 @@ class AplikasiRestoran {
                 new Produk( "nasi goreng", 35000, "makanan", numberFormat, false),
                 new Produk( "teh manis", 5000, "minuman", numberFormat, true),
                 new Produk( "bakmie goreng", 45000, "makanan", numberFormat, false),
+                new Produk( "bihun goreng", 45000, "makanan", numberFormat, false),
+                new Produk( "kweetiau goreng", 45000, "makanan", numberFormat, false),
+                new Produk( "es jeruk", 45000, "minuman", numberFormat, false),
+                new Produk( "jus", 12000, "minuman", numberFormat, false),
         };
         katalog = new Katalog(listProduk, numberFormat);
 
