@@ -300,6 +300,7 @@ class Pemesanan {
                     }
                     Produk produkGratis = freeOffer[pilihanGratis - 1];
                     keranjang.addToCart(produkGratis, 1, 0);
+                    keranjang.addToCart(produkGratis, 1, produkGratis.getHarga());
                 }
                 break;
             }
