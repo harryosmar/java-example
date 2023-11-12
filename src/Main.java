@@ -227,9 +227,9 @@ class Katalog {
     }
 
     public Produk[] tambahProduk(String nama, double harga, String kodeKategori) {
-        if (kodeKategori.equals("MA")  || kodeKategori.equals("MI")) {
+        if (kodeKategori.equalsIgnoreCase("MA")  || kodeKategori.equalsIgnoreCase("MI")) {
             String kategori = "makanan";
-            if (kodeKategori == "MI") {
+            if (kodeKategori.equalsIgnoreCase("MI")) {
                 kategori = "minuman";
             }
 
@@ -363,7 +363,7 @@ class AplikasiRestoran {
                 Scanner newscanner = new Scanner(System.in);
                 System.out.print("Apakah Anda yakin menghapus produk id \""+ idProduk +"\" y/n ? ");
                 String konfirmasi = newscanner.nextLine().trim();
-                if (konfirmasi.equals("y")) {
+                if (konfirmasi.equalsIgnoreCase("y")) {
                     katalog.hapusProduk(idProduk);
                 }
             } else if (pilihan == 3) {
