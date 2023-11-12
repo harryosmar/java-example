@@ -283,7 +283,7 @@ class Pemesanan {
             }
             if (pilihan == 0) {
                 double totalHarga = keranjang.getTotalHarga();
-                if (totalHarga >= 50000) {
+                if (totalHarga >= 50000 && totalHarga < 100000) {
                     System.out.println("Penawaran untuk Anda, Beli 1 Gratis 1 :");
                     System.out.println("0. Tidak menggunakan penawaran");
                     Produk[] freeOffer = katalog.penawaranGratis();
